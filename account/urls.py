@@ -5,6 +5,8 @@ from account.views.test.tests import Test
 
 instance = Blueprint('even', __name__)
 
+MODEL_NAME = "account"
+
 urls = ()
 
 routing_dict = dict()

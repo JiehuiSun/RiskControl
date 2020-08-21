@@ -4,7 +4,6 @@ from flask import Flask
 from werkzeug.routing import BaseConverter
 
 from even import configs
-from account import instance
 from even import db
 from even import redis
 from even import session
@@ -12,7 +11,6 @@ from account.views.login.helpers import algorithm_auth_login
 
 
 APP_NAME = 'even'
-
 
 class RegexConverter(BaseConverter):
     def __init__(self, url_map, *args):
@@ -35,6 +33,7 @@ def create_app():
 
 
 def config_blueprint(app):
+    from even.urls import instance
     app.register_blueprint(instance, url_prefix='/api')
 
 

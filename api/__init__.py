@@ -102,7 +102,7 @@ class Api(VerParams, Resp, View):
         return path, key, tail_slash
 
     def __dispatch(self):
-        from account.urls import routing_dict
+        from even.urls import routing_dict
         path = request.path.replace('/api', '')
         if not path:
             raise errors.MethodError
