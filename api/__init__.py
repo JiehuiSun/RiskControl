@@ -72,11 +72,10 @@ class Api(VerParams, Resp, View):
             self._handle_params()
             self.__dispatch()
             method = getattr(self, request.method.lower(), None)
-            # self.ver_params()
             if not method:
                 raise errors.MethodError
             self._pre_handle()
-            result = method(*args, **kwargs)
+            result = method()
             self._after_handle()
         except errors.BaseError as e:
             result = {
@@ -103,8 +102,7 @@ class Api(VerParams, Resp, View):
         return path, key, tail_slash
 
     def __dispatch(self):
-        from account.urls import urls
-        routing_table = dict(urls)
+        from account.urls import routing_dict
         path = request.path.replace('/api', '')
         if not path:
             raise errors.MethodError
@@ -113,20 +111,13 @@ class Api(VerParams, Resp, View):
         tail_slash = ''
         api_path = path
         upstream = ''
-        if path in routing_table:
-            upstream = routing_table[path]
+        if path in routing_dict:
+            upstream = routing_dict[path]
         else:
             subpath, self.key, tail_slash = self.__get_subpath(path)
-            if subpath in routing_table:
-                upstream = routing_table[subpath]
+            if subpath in routing_dict:
+                upstream = routing_dict[subpath]
                 api_path = subpath
-            else:
-                for re_obj, call_addr in re_routing_list:
-                    ret = re_obj.search(path)
-                    if ret:
-                        upstream = call_addr
-                        path_dict = ret.groupdict()
-                        break
         if not upstream:
             raise errors.MethodError
 
@@ -134,7 +125,7 @@ class Api(VerParams, Resp, View):
         url = ''
         # 目前先不走url
         if isinstance(upstream, str):
-            raise HttpResponseServerError()
+            raise errors.MethodError("请求无效")
 
         lpc = upstream
 
@@ -166,8 +157,7 @@ class Api(VerParams, Resp, View):
                     self.call_method = 'list'
             except Exception as e:
                 # logger.error(f'请求失败：\ncall_method {request.method.lower()}\n url {request.path} \n headers {headers} ;\n data {data} \n {e} ')
-                pass
-                raise HttpResponseBadRequest()
+                raise errors.MethodError("请求无效")
             return
         if url:
-            return METHOD_MAP[request.method.lower()](url, headers=headers, data=data, files=request.FILES)
+            raise errors.MethodError("请求无效")

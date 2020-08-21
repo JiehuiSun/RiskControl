@@ -1,6 +1,7 @@
 import os
 import logging
 from flask import Flask
+from werkzeug.routing import BaseConverter
 
 from even import configs
 from account import instance
@@ -13,9 +14,17 @@ from account.views.login.helpers import algorithm_auth_login
 APP_NAME = 'even'
 
 
+class RegexConverter(BaseConverter):
+    def __init__(self, url_map, *args):
+        super(RegexConverter, self).__init__(url_map)
+        # 将接受的第1个参数当作匹配规则进行保存
+        self.regex = args[0]
+
+
 def create_app():
     app = Flask(APP_NAME)
     app.config.from_object(configs.DefaultConfig)
+    app.url_map.converters['re'] = RegexConverter
     config_blueprint(app)
     config_logger(app)
     config_db(app)

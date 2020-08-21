@@ -7,13 +7,17 @@ instance = Blueprint('even', __name__)
 
 urls = ()
 
-version = "v1"
+routing_dict = dict()
+v1_routing_dict = dict()
 
 # login
-urls += (
-    ('/{0}/{1}/'.format(version, "test"), Test.as_view("test")),
-)
+v1_routing_dict["test"] = Test
+
+for k, v in v1_routing_dict.items():
+    routing_dict["/v1/{0}/".format(k)] = v
 
 methods = ['GET', 'POST', 'PUT', 'DELETE']
-for path, view in urls:
-    instance.add_url_rule(path, view_func=view, methods=methods)
+for path, view in routing_dict.items():
+    instance.add_url_rule("{0}<re('.*'):key>".format(path),
+                          view_func=view.as_view(path),
+                          methods=methods)
