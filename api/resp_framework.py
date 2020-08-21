@@ -5,6 +5,9 @@
 # Filename: resp_framework.py
 
 
+from account import errcode as test_errcode
+
+
 class _EvenException(Exception):
     _errcode_dict = {
         0: 'OK',
@@ -49,9 +52,10 @@ class Resp(_EvenException):
 
         # 文案
         10201: "",
-
-        # 第三方
     }
+
+    for k, v in test_errcode.err_code_dict.items():
+        err_code_dict[k] = v
 
     @classmethod
     def ret(cls, errcode=0, errmsg="", data={}):
@@ -65,7 +69,7 @@ class Resp(_EvenException):
             return ret
 
         if errcode not in cls.err_code_dict:
-            ret["errcode"] = 10399
+            ret["errcode"] = 10999
         if errmsg:
             ret["errmsg"] = "{0}({1})".format(cls.err_code_dict[ret["errcode"]], errmsg)
         else:
