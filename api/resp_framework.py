@@ -5,7 +5,9 @@
 # Filename: resp_framework.py
 
 
-from account import errcode as test_errcode
+import os
+import importlib
+from even.configs import DefaultConfig
 
 
 class _EvenException(Exception):
@@ -54,8 +56,18 @@ class Resp(_EvenException):
         10201: "",
     }
 
-    for k, v in test_errcode.err_code_dict.items():
-        err_code_dict[k] = v
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+    for module in DefaultConfig.MODULES:
+        if os.path.exists(os.path.join(BASE_DIR, '{}/errcode.py'.format(module))):
+            app_router = importlib.import_module('{}.errcode'.format(module))
+            try:
+                model_err_dict = app_router.err_code_dict
+                for k, v in model_err_dict.items():
+                    err_code_dict[k] = v
+            except:
+                pass
+
 
     @classmethod
     def ret(cls, errcode=0, errmsg="", data={}):

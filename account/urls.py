@@ -17,9 +17,3 @@ v1_routing_dict["test"] = Test
 
 for k, v in v1_routing_dict.items():
     routing_dict["/v1/{0}/".format(k)] = v
-
-methods = ['GET', 'POST', 'PUT', 'DELETE']
-for path, view in routing_dict.items():
-    instance.add_url_rule("{0}<re('.*'):key>".format(path),
-                          view_func=view.as_view(path),
-                          methods=methods)

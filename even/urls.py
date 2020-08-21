@@ -1,4 +1,5 @@
-# 这里将url进行统一的管理，每添加一个接口，只需要在urls中添加即可
+# 这里将url进行统一的管理
+# 每个模块下的urls文件中必须有MODEL_NAME及routing_dict
 import os
 import sys
 import importlib

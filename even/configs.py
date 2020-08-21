@@ -17,7 +17,7 @@ class DefaultConfig(object):
     SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://even:even@localhost/even?charset=utf8mb4'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     REDIS_URI = 'redis://:@localhost:6379/3'
-    APP_LOGIN_AUTH_KEY = "sun"
+    APP_LOGIN_AUTH_KEY = "mumway"
 
     MODULES = (
         "account",
