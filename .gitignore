@@ -21,6 +21,7 @@ sdist/
 var/
 mandela/settings_local.py
 mandela/settings_portal_local.py
+even/*_configs.py
 logs/
 gen_git_manifest.sh
 gen_patch.sh
@@ -59,6 +60,7 @@ coverage.xml
 # Django stuff:
 *.log
 */migrations/0*
+migrations
 *.wpr
 *.wpu
 dev.py

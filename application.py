@@ -7,7 +7,7 @@ from even import configs
 from even import db
 from even import redis
 from even import session
-from account.views.login.helpers import algorithm_auth_login
+from account.helpers import algorithm_auth_login
 
 
 APP_NAME = 'even'
@@ -64,7 +64,7 @@ def config_session(app):
 def config_login(app):
     configs.lm.init_app(app)
 
-    from account.models.UserModel import User
+    from account.models.UserModel import UserModel
 
     @configs.lm.request_loader
     def load_user_from_request(req):
@@ -77,7 +77,7 @@ def config_login(app):
             return
         auth_code_new = algorithm_auth_login(user_id, random_str, timestamp)
         if auth_code == auth_code_new.split("|")[-1]:
-            ret = User.query.filter_by(id=user_id).one_or_none()
+            ret = UserModel.query.filter_by(id=user_id).one_or_none()
             # user_session = {"user_id": user_id}
         else:
             return

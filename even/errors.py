@@ -46,3 +46,7 @@ class NoTokenError(BaseError):
 class ParamsError(BaseError):
     errno = 10001
     errmsg = '请求参数异常'
+
+class DBError(BaseError):
+    errno = 99999
+    errmsg = '数据库异常'

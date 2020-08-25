@@ -63,7 +63,6 @@ class Api(VerParams, Resp, View):
         """
         pass
 
-    # def __call__(self, *args, **kwargs):
     def dispatch_request(self, *args, **kwargs):
         data = ''
         errno = 0
@@ -78,12 +77,14 @@ class Api(VerParams, Resp, View):
             result = method()
             self._after_handle()
         except errors.BaseError as e:
+            current_app.logger.error(e)
             result = {
                 "errcode": e.errno,
                 "errmsg": e.errmsg,
                 "data": {}
             }
         except Exception as e:
+            current_app.logger.error(e)
             current_app.logger.exception(e)
             result = {
                 "errcode": errors.BaseError.errno,
