@@ -8,6 +8,8 @@ from even import db
 from even import redis
 from even import session
 from even import mail
+from datacenter import apscheduler
+from datacenter import task
 from account.helpers import algorithm_auth_login
 
 
@@ -31,6 +33,7 @@ def create_app():
     config_session(app)
     config_login(app)
     config_mail(app)
+    config_apscheduler(app)
     return app
 
 
@@ -92,4 +95,10 @@ def config_mail(app):
     mail.init_app(app)
 
 
+def config_apscheduler(app):
+    apscheduler.init_app(app)
+    apscheduler.start()
+
+
 app = create_app()
+tasks.InitTasks()

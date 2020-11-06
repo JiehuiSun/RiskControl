@@ -3,6 +3,7 @@ from flask_login import LoginManager
 from utils.flask_redis import FlaskRedis
 from utils.session import Session
 from flask_mail import Mail
+from flask_apscheduler import APScheduler
 
 
 db = SQLAlchemy()
@@ -10,6 +11,7 @@ redis = FlaskRedis()
 session = Session()
 lm = LoginManager()
 mail = Mail()
+apscheduler = APScheduler()
 
 
 class DefaultConfig(object):

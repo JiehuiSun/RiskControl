@@ -157,3 +157,14 @@ def send_mail(title: str, content: str, user_mail_list: list, attachments: list 
 
     from datacenter import mail
     mail.send(msg)
+
+
+def tasks(**params):
+    def outter(func):
+        def wrapper(*args,**kwargs):
+            res = func
+            from datacenter import apscheduler
+            apscheduler.add_job(func=func, **params)
+            return res
+        return wrapper
+    return outter
