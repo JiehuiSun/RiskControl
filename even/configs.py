@@ -2,12 +2,14 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from utils.flask_redis import FlaskRedis
 from utils.session import Session
+from flask_mail import Mail
 
 
 db = SQLAlchemy()
 redis = FlaskRedis()
 session = Session()
 lm = LoginManager()
+mail = Mail()
 
 
 class DefaultConfig(object):

@@ -7,6 +7,7 @@ from even import configs
 from even import db
 from even import redis
 from even import session
+from even import mail
 from account.helpers import algorithm_auth_login
 
 
@@ -29,6 +30,7 @@ def create_app():
     config_redis(app)
     config_session(app)
     config_login(app)
+    config_mail(app)
     return app
 
 
@@ -84,5 +86,10 @@ def config_login(app):
         if not ret:
             return
         return ret
+
+
+def config_mail(app):
+    mail.init_app(app)
+
 
 app = create_app()

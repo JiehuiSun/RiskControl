@@ -133,3 +133,27 @@ class ConnectDB(metaclass=ConnectDBMetaClass):
     data = ConnectDB.mysql.project.execute_sql("select * from table")
     """
     pass
+
+
+def send_mail(title: str, content: str, user_mail_list: list, attachments: list = None,
+              html_content: str = None, bcc: list = None, send_date: str = None):
+    params = {
+        "subject": title,
+        "recipients": user_mail_list,
+        "body": content,
+        "html": html_content,
+        "sender": current_app.config["MAIL_USERNAME"],
+        "bcc": bcc,
+        # "attachments": attachments,
+        "date": send_date,
+    }
+
+    msg = Message(**params)
+    from application import app
+    if attachments:
+        for i in attachments:
+            with app.open_resource(f"../{i}") as fp:
+                msg.attach(i.split("/")[-1], mimetypes.guess_type("aaa.txt")[0], fp.read())
+
+    from datacenter import mail
+    mail.send(msg)
