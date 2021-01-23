@@ -2,6 +2,7 @@
 import json
 import mimetypes
 import requests
+import threading
 import pymysql
 from flask import current_app
 from flask_mail import Message
@@ -86,11 +87,21 @@ class DBSql(object):
             sql_text += f" limit {self.limit}"
 
         try:
-            self.cursor.execute(sql_text)
+            lock = threading.Lock()
+            lock.acquire(timeout=30)
+            try:
+                self.cursor.execute(sql_text)
+                self.cursor.close()
+            finally:
+                lock.release()
             data_dict = self.fetch_all_to_dict(self.cursor)
         except Exception as e:
-            current_app.logger.error(f">> Sql错误: {sql_text} \n {e}")
-            raise SyntaxError(f"Sql错误.. {sql_text} \n {e}")
+            # 最好是只检查超时时再重新执行
+            try:
+                return self.re_execute_sql(sql_text)
+            except Exception as e:
+                raise SyntaxError(f"Sql错误.. {sql_text} \n {e}")
+        self.client.close()
 
         return data_dict
 
@@ -113,6 +124,21 @@ class DBSql(object):
     @property
     def name(self):
         return self.db_name
+
+    def re_execute_sql(self, sql_text):
+        """
+        重新执行sql(时间较长的sql)
+        """
+        lock = threading.Lock()
+        lock.acquire(timeout=300)
+        try:
+            self.cursor.execute(sql_text)
+            self.cursor.close()
+        finally:
+            lock.release()
+        data_dict = self.fetch_all_to_dict(self.cursor)
+        self.client.close()
+        return data_dict
 
 
 class ConnectDBMetaClass(type):
