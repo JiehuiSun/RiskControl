@@ -33,8 +33,6 @@ class DefaultConfig(object):
 
 
 try:
-    print("a" * 40)
     from .local_configs import *
-    print("b" * 40)
 except ModuleNotFoundError as e:
     pass
