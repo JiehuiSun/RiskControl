@@ -4,9 +4,9 @@ import os
 import sys
 import importlib
 from flask import Blueprint
-from even.configs import DefaultConfig
+from base.configs import DefaultConfig
 
-instance = Blueprint('even', __name__)
+instance = Blueprint('risk_Control', __name__)
 
 urls = ()
 

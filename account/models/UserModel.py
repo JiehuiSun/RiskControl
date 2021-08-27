@@ -6,8 +6,8 @@ import bcrypt
 from flask import current_app
 from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 from sqlalchemy.exc import IntegrityError
-from even import db
-from even import errors
+from base import db
+from base import errors
 from utils import time_utils
 
 

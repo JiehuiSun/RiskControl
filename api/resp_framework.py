@@ -7,10 +7,10 @@
 
 import os
 import importlib
-from even.configs import DefaultConfig
+from base.configs import DefaultConfig
 
 
-class _EvenException(Exception):
+class _baseException(Exception):
     _errcode_dict = {
         0: 'OK',
     }
@@ -32,7 +32,7 @@ class _EvenException(Exception):
         return False
 
 
-class Resp(_EvenException):
+class Resp(_baseException):
     """
     返回封装
     每个模块的开头两位数不一样

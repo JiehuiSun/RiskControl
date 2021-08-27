@@ -8,8 +8,8 @@ from flask import jsonify
 from flask import current_app
 from flask.views import View
 
-from even import errors
-from even import session
+from base import errors
+from base import session
 
 from .req_framework import VerParams
 from .resp_framework import Resp
@@ -103,7 +103,7 @@ class Api(VerParams, Resp, View):
         return path, key, tail_slash
 
     def __dispatch(self):
-        from even.urls import routing_dict
+        from base.urls import routing_dict
         path = request.path.replace('/api', '')
         if not path:
             raise errors.MethodError

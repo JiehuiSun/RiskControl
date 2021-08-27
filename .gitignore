@@ -21,7 +21,7 @@ sdist/
 var/
 mandela/settings_local.py
 mandela/settings_portal_local.py
-even/*_configs.py
+base/*_configs.py
 logs/
 gen_git_manifest.sh
 gen_patch.sh

@@ -3,17 +3,17 @@ import logging
 from flask import Flask
 from werkzeug.routing import BaseConverter
 
-from even import configs
-from even import db
-from even import redis
-from even import session
-from even import mail
-from even import apscheduler
-from even import tasks
+from base import configs
+from base import db
+from base import redis
+from base import session
+from base import mail
+from base import apscheduler
+from base import tasks
 from account.helpers import algorithm_auth_login
 
 
-APP_NAME = 'even'
+APP_NAME = 'base'
 
 class RegexConverter(BaseConverter):
     def __init__(self, url_map, *args):
@@ -38,7 +38,7 @@ def create_app():
 
 
 def config_blueprint(app):
-    from even.urls import instance
+    from base.urls import instance
     app.register_blueprint(instance, url_prefix='/api')
 
 
