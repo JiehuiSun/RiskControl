@@ -85,7 +85,7 @@ class AlreadyTriggerModel(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     trigger_id = db.Column(db.ForeignKey("trigger_model.id"))
-    trigger = db.relationship('TriggerModel', backref=db.backref('strategy_model', lazy='dynamic'))
+    trigger = db.relationship('TriggerModel', backref=db.backref('already_trigger_model', lazy='dynamic'))
     dt_trigger = db.Column(db.DateTime, default=time_utils.now_dt, comment="第一次触发时间")
     dt_create = db.Column(db.DateTime, default=time_utils.now_dt)
 
@@ -98,6 +98,6 @@ class ReqLogsModel(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     trigger_id = db.Column(db.ForeignKey("trigger_model.id"))
-    trigger = db.relationship('TriggerModel', backref=db.backref('strategy_model', lazy='dynamic'))
+    trigger = db.relationship('TriggerModel', backref=db.backref('req_logs_model', lazy='dynamic'))
     info = db.Column(db.Text, comment="请求内容")
     dt_create = db.Column(db.DateTime, default=time_utils.now_dt)

@@ -1,5 +1,6 @@
 
 import json
+import hashlib
 import mimetypes
 import requests
 import threading
@@ -19,7 +20,7 @@ class Requests(object):
             return json.dumps({"errcode": 10000, "errmsg": "不支持的请求"})
         headers_dict = kwargs.get("headers", dict())
         if not headers_dict.get("X-MUMWAY-TRACEID"):
-            from datacenter import redis
+            from base import redis
             headers_dict["X-MUMWAY-TRACEID"] = redis.client.get("X-MUMWAY-TRACEID")
 
         kwargs["headers"] = headers_dict
@@ -194,3 +195,6 @@ def tasks(**params):
             return res
         return wrapper
     return outter
+
+def hash_md5(s):
+    return hashlib.md5(s.encode()).hexdigest()
