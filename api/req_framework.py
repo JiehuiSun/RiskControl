@@ -120,3 +120,12 @@ class VerParams:
             return True, 'OK'
         except:
             return False, '{0} 日期格式错误, 如: "{1}", 谢谢配合!'.format(key_name, dt_format)
+
+    def _valid_dict(self, i, key_name=None):
+        '''
+        参数必须为dict类型
+        '''
+        if isinstance(i, dict):
+            return True, 'OK'
+        return False, '{0} 必须为dict(字典/对象)类型, 谢谢配合!'.format(key_name)
+

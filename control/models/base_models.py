@@ -73,6 +73,7 @@ class StrategyModel(db.Model):
     need_code = db.Column(db.String(64), nullable=False, comment="需要的唯一码")
     req_code = db.Column(db.String(64), nullable=False, comment="请求的唯一码")
     dt_trigger = db.Column(db.DateTime, default=time_utils.now_dt, comment="第一次触发时间")
+    is_deleted = db.Column(db.Boolean, default=False)
     dt_create = db.Column(db.DateTime, default=time_utils.now_dt)
     dt_update = db.Column(db.DateTime, default=time_utils.now_dt, onupdate=time_utils.now_dt)
 
@@ -84,8 +85,9 @@ class AlreadyTriggerModel(db.Model):
     __tablename__ = "already_trigger_model"
 
     id = db.Column(db.Integer, primary_key=True)
-    trigger_id = db.Column(db.ForeignKey("trigger_model.id"))
-    trigger = db.relationship('TriggerModel', backref=db.backref('already_trigger_model', lazy='dynamic'))
+    rule = db.Column(db.Integer, nullable=False, comment="规则CODE")
+    strategy_id = db.Column(db.ForeignKey("strategy_model.id"))
+    strategy = db.relationship('StrategyModel', backref=db.backref('already_trigger_model', lazy='dynamic'))
     dt_trigger = db.Column(db.DateTime, default=time_utils.now_dt, comment="第一次触发时间")
     dt_create = db.Column(db.DateTime, default=time_utils.now_dt)
 
@@ -97,7 +99,23 @@ class ReqLogsModel(db.Model):
     __tablename__ = "req_logs_model"
 
     id = db.Column(db.Integer, primary_key=True)
-    trigger_id = db.Column(db.ForeignKey("trigger_model.id"))
-    trigger = db.relationship('TriggerModel', backref=db.backref('req_logs_model', lazy='dynamic'))
+    rule = db.Column(db.Integer, nullable=False, comment="规则CODE")
+    strategy_id = db.Column(db.ForeignKey("strategy_model.id"))
+    strategy = db.relationship('StrategyModel', backref=db.backref('req_logs_model', lazy='dynamic'))
     info = db.Column(db.Text, comment="请求内容")
     dt_create = db.Column(db.DateTime, default=time_utils.now_dt)
+
+class SourceDataByContractSignModel(db.Model):
+    """
+    源数据表(可被三方DB代替)
+    """
+    __tablename__ = "source_data_con_sign_model"
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(256), nullable=False, comment="名字")
+    phone = db.Column(db.String(256), nullable=False, comment="手机号")
+    identity_no = db.Column(db.String(256), nullable=False, comment="证件号")
+    identity_type = db.Column(db.Integer, nullable=False, comment="证件类型")
+    status = db.Column(db.Integer, nullable=False, comment="状态(0：未签署 1：已签署)")
+    c_id = db.Column(db.String(256), nullable=False, comment="订单合同成员表主键ID")
+    sign_time = db.Column(db.DateTime, nullable=True)
